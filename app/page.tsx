@@ -4,9 +4,10 @@
 import styles from "./page.module.css";
 import React, { useEffect, useState } from "react";
 
+// import createClient from "./utils/connectToYorkie";
 import * as yorkie from "yorkie-js-sdk";
 
-async function connectToYorkie(
+async function attachDoc(
   client: yorkie.Indexable,
   doc: yorkie.Indexable,
 ) {
@@ -16,31 +17,36 @@ async function connectToYorkie(
 
 export default function Home() {
   const [isConnected, setIsConnected] = useState<boolean>(false);
+  // Yorkie Document declaration
+  // const [doc] = useState<yorkie.Document<yorkie.Indexable>>(() => new yorkie.Document("my-doc"));
+  // const [test, setTest] = useState([]);
 
   useEffect(() => {
-    // Yorkie Client declaration
-    const client = new yorkie.Client("http://localhost:8080", {
+    // create Yorkie Client, Document at server-side
+    // const client = createClient();
+    const client = new yorkie.Client('http://localhost:8080', {
       apiKey: "",
     });
-    // Yorkie Document declaration
-    const doc = new yorkie.Document("doc-1");
 
-    connectToYorkie(client, doc)
+    const doc = new yorkie.Document('test')
+
+    // attach Document into the Client
+    attachDoc(client, doc)
       .then(() => {
-        console.log("success");
+        console.log("attach document to client success");
       })
       .catch((e: Error) => {
         console.log(e);
       });
 
-    client.subscribe(event => {
+    client.subscribe((event: yorkie.Indexable) => {
       if (event.type === "stream-connection-status-changed") {
         event.value === "connected"
           ? setIsConnected(true)
           : setIsConnected(false);
       }
     });
-  });
+  }, []);
 
   return (
     <main className={styles.main}>
