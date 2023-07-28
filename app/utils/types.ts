@@ -1,10 +1,11 @@
-import { Text } from "yorkie-js-sdk";
+import { Text, Indexable } from "yorkie-js-sdk";
 
 export interface ENVtypes {
   url?: string;
   apiKey?: string;
 }
 
-export type ContentType = {
+export interface DocTypes {
   content: Text;
-};
+  peers?: any;
+}
