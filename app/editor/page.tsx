@@ -3,12 +3,16 @@
 
 import styles from "../page.module.css";
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, redirect } from "next/navigation";
 
-import { ContentType } from "../utils/types";
+import { DocTypes } from "../utils/types";
 import yorkie, { Text, Document } from "yorkie-js-sdk";
+import { displayPeers } from "../utils/displayPeers";
+import TextEditor from "./textEditor";
 
-const documentKey = `next.js-example-${new Date()
+const DEFAULT_CONTENT: Text = new yorkie.Text();
+
+const DOCUMENT_KEY = `next.js-example-${new Date()
   .toISOString()
   .substring(0, 10)
   .replace(/-/g, "")}`;
@@ -16,13 +20,12 @@ const documentKey = `next.js-example-${new Date()
 export default function Editor() {
   const navigate = useRouter();
   const userName = window.localStorage.getItem("name");
-
-  const [isConnected, setIsConnected] = useState<boolean>(false);
-  const [content, setContent] = useState<Text>();
   // create Yorkie Doc by useState, to change the state of docs dynamically
-  const [doc] = useState<Document<ContentType>>(
-    () => new yorkie.Document<ContentType>(documentKey),
+  const [doc] = useState<Document<DocTypes>>(
+    () => new yorkie.Document<DocTypes>(DOCUMENT_KEY),
   );
+  const [content, setContent] = useState<Text>(DEFAULT_CONTENT);
+  const [peers, setPeers] = useState<any>([userName]);
 
   const logOut = () => {
     window.localStorage.removeItem("name");
@@ -30,31 +33,43 @@ export default function Editor() {
   };
 
   useEffect(() => {
+    if (!window.localStorage.getItem("name")) {
+      redirect("/");
+    }
+
     // create Yorkie Client at client-side
-    const client = new yorkie.Client("http://localhost:8080", {
-      apiKey: "",
+    const client = new yorkie.Client("https://api.yorkie.dev", {
+      apiKey: "cedaovjuioqlk4pjqn6g",
       presence: {
         userName: `${userName}`,
       },
     });
 
+    client.subscribe(event => {
+      if (event.type === "peers-changed") {
+        setPeers(displayPeers(client.getPeersByDocKey(doc.getKey())));
+      }
+    });
+
     async function attachDoc(
-      doc: Document<ContentType>,
+      doc: Document<DocTypes>,
       callback: (content: Text) => void,
     ) {
-      await client.activate;
+      await client.activate();
       await client.attach(doc);
 
       doc.update(root => {
         if (!root.content) {
           root.content = new yorkie.Text();
-          root.content.edit(0, 0, "/n");
+          root.content.edit(0, 0, "Enter text here!");
         }
       }, "create default content if not exists");
 
       doc.subscribe(event => {
         callback(doc.getRoot().content);
       });
+
+      callback(doc.getRoot().content);
     }
 
     attachDoc(doc, content => setContent(content));
@@ -62,8 +77,9 @@ export default function Editor() {
 
   return (
     <main className={styles.main}>
-      {/* <h1>state : {isConnected ? "connected" : "disconnected"}</h1> */}
-      <p>name : {userName}</p>
+      <p>me : {userName}</p>
+      <hr />
+      <TextEditor content={content} peers={peers} />
       <hr />
       <button onClick={logOut}>log out</button>
     </main>
