@@ -2,7 +2,7 @@
 
 import styles from "./page.module.css";
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, redirect } from "next/navigation";
 
 export default function Main() {
   const navigate = useRouter();
@@ -10,7 +10,7 @@ export default function Main() {
 
   useEffect(() => {
     if (window.localStorage.getItem("name")) {
-      navigate.push("/editor");
+      redirect("/editor");
     }
   }, []);
 
