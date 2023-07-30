@@ -1,61 +1,94 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import "./calendar.css";
+import styles from "./page.module.css";
 
-import { EditorPropsTypes, CalendarValue, ChangeEventHandler } from "../utils/types";
+import { EditorPropsTypes, CalendarValue } from "../utils/types";
 import Calendar from "react-calendar";
-import './calendar.css'
 import moment from "moment";
 
 export default function TextEditor(props: EditorPropsTypes) {
-  const { content, peers, mark, actions } = props;
-  const [ date, onChange ] = useState<CalendarValue>(new Date());
-  // const [ mark, setMark ] = useState<Array<string>>(["02-07-2023", "12-07-2023"]);
+  const { content, peers, actions } = props;
+  const [date, onChange] = useState<CalendarValue>(new Date());
+  const [text, setText] = useState<string>("Enter text here!");
 
   const currentDate = moment(date?.toString()).format("DD-MM-YYYY");
 
-  // const test = (date: any) => {
-  //   setMark(mark.filter((e) => {return e != date}))
-  // }
+  const eventHandler = (event: string) => {
+    switch (event) {
+      case "PUSH":
+        let flag = false;
+        content.forEach(item => {
+          if (item.date === currentDate) {
+            flag = !flag;
+            return 0;
+          }
+        });
+
+        flag
+          ? actions.updateContent(currentDate, text)
+          : actions.addContent(currentDate, text);
+
+        setText("Enter text here!");
+        break;
+      case "DELETE":
+        actions.deleteContent(currentDate);
+        break;
+    }
+  };
 
   return (
     <>
-      <ul>
-        {peers.map((item: any) => {
-          return <li>{item}</li>;
+      <p>
+        peers : [
+        {peers.map((man: string) => {
+          return <span> {man}, </span>;
         })}
-      </ul>
-      <hr />
+        ]
+      </p>
       <div>
-        <Calendar 
+        <Calendar
           onChange={onChange}
           value={date}
           locale="en-EN"
           showNeighboringMonth={false}
           formatDay={(locale, date) =>
-            date.toLocaleString('en', { day: 'numeric' })
+            date.toLocaleString("en", { day: "numeric" })
           }
-          tileClassName={({ date }) => mark.find((x) => x === moment(date).format("DD-MM-YYYY")) ? "highlight" : ""}
+          tileClassName={({ date }) =>
+            content.find(
+              item => item.date === moment(date).format("DD-MM-YYYY"),
+            )
+              ? "highlight"
+              : ""
+          }
         />
-        <p>currentDate : {currentDate}</p>
-        {mark.map((e: any) => {
-          return(
-            <p>{e}</p>
-          )
-        })}
-        <button onClick={() => actions.addMark(currentDate)}>push</button>
-        <button onClick={() => actions.deleteMark(currentDate)}>pop</button>
-        <button onClick={() => alert(mark)}>print</button>
+        <p>selected day : {currentDate}</p>
+        <div className={styles.memo}>
+          {content.map(item => {
+            if (item.date === currentDate) {
+              return <p>{item.text}</p>;
+            }
+          })}
+        </div>
+        <div className={styles.inputForm_editor}>
+          <h3>input form</h3>
+          <textarea
+            className={styles.textArea}
+            value={text}
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+              setText(e.target.value)
+            }
+          />
+        </div>
+        <button className="button" onClick={() => eventHandler("PUSH")}>
+          push
+        </button>
+        <button className="button" onClick={() => eventHandler("DELETE")}>
+          pop
+        </button>
       </div>
     </>
   );
 }
-
-// view === 'month' && date.getDay() === 3 ? 'wednesday' : null
-
-// {
-//   // if (example.find((x) => x === moment(date).format("DD-MM-YYYY"))) {
-//   //   return "highlight";
-//   // }
-//   view === 'month' && date.getDay() === 3 ? 'wednesday' : null
-// }
