@@ -5,19 +5,25 @@ export interface ENVtypes {
   apiKey?: string;
 }
 
-export interface DocTypes {
-  content: Text;
-  mark: JSONArray<string>;
+// export interface DocTypes {
+//   content: Text;
+//   mark: JSONArray<string>;
+// }
+
+export interface ContentTypes {
+  date: string;
+  text: string;
 }
 
 export interface EditorPropsTypes {
-  content: Text;
-  mark: JSONArray<string>;
+  content: Array<ContentTypes>;
   peers: any;
   actions: { [name: string]: Function };
 }
 
-export type ChangeEventHandler = (event: React.ChangeEvent<HTMLInputElement>) => void;
+export type ChangeEventHandler = (
+  event: React.ChangeEvent<HTMLInputElement>,
+) => void;
 
 type ValuePiece = Date | null;
 
