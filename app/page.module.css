@@ -1,12 +1,13 @@
 .main {
   display: flex;
-  padding: 6rem;
-  min-height: 100vh;
+  flex-direction: column;
+  margin-top: 2rem;
+  max-width: 22rem;
 }
 
 .inputForm {
   display: flex;
-  flex-direction: column;
-  padding: 2rem;
-  margin: 2rem;
+  flex-direction: row;
+  margin-top: 0.5rem;
+  box-shadow: 0 0 1rem 0.5rem rgb(0 0 0 / 10%);
 }
