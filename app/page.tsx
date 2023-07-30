@@ -20,15 +20,20 @@ export default function Main() {
   };
 
   return (
-    <main className={styles.inputForm}>
-      <input
-        placeholder="your name?"
-        value={userName}
-        onChange={e => {
-          setUserName(e.target.value);
-        }}
-      />
-      <button onClick={handleSubmit}>Submit</button>
+    <main className={styles.main}>
+      <h1>Enter your name</h1>
+      <section className={styles.inputForm}>
+        <input
+          placeholder="your name?"
+          value={userName}
+          onChange={e => {
+            setUserName(e.target.value);
+          }}
+        />
+        <button className="button" onClick={handleSubmit}>
+          Submit
+        </button>
+      </section>
     </main>
   );
 }
