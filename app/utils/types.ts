@@ -1,14 +1,7 @@
-import { Text, JSONArray } from "yorkie-js-sdk";
-
 export interface ENVtypes {
   url?: string;
   apiKey?: string;
 }
-
-// export interface DocTypes {
-//   content: Text;
-//   mark: JSONArray<string>;
-// }
 
 export interface ContentTypes {
   date: string;
