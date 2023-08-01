@@ -5,15 +5,15 @@ import "./calendar.css";
 import styles from "./page.module.css";
 
 import { EditorPropsTypes, CalendarValue } from "../utils/types";
+import { parseDate } from "../utils/parseDate";
 import Calendar from "react-calendar";
-import moment from "moment";
 
-export default function TextEditor(props: EditorPropsTypes) {
+export default function Sceduler(props: EditorPropsTypes) {
   const { content, peers, actions } = props;
   const [date, onChange] = useState<CalendarValue>(new Date());
   const [text, setText] = useState<string>("Enter text here!");
 
-  const currentDate = moment(date?.toString()).format("DD-MM-YYYY");
+  const currentDate = date ? parseDate(new Date(date.toString())) : "";
 
   const eventHandler = (event: string) => {
     switch (event) {
@@ -39,11 +39,11 @@ export default function TextEditor(props: EditorPropsTypes) {
   };
 
   return (
-    <>
+    <article>
       <p>
         peers : [
-        {peers.map((man: string) => {
-          return <span> {man}, </span>;
+        {peers.map((man: string, i: number) => {
+          return <span key={i}> {man}, </span>;
         })}
         ]
       </p>
@@ -57,18 +57,16 @@ export default function TextEditor(props: EditorPropsTypes) {
             date.toLocaleString("en", { day: "numeric" })
           }
           tileClassName={({ date }) =>
-            content.find(
-              item => item.date === moment(date).format("DD-MM-YYYY"),
-            )
+            content.find(item => item.date === parseDate(date))
               ? "highlight"
               : ""
           }
         />
         <p>selected day : {currentDate}</p>
         <div className={styles.memo}>
-          {content.map(item => {
+          {content.map((item, i: number) => {
             if (item.date === currentDate) {
-              return <p>{item.text}</p>;
+              return <p key={i}>{item.text}</p>;
             }
           })}
         </div>
@@ -89,6 +87,6 @@ export default function TextEditor(props: EditorPropsTypes) {
           pop
         </button>
       </div>
-    </>
+    </article>
   );
 }

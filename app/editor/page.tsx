@@ -3,31 +3,29 @@
 
 import styles from "../page.module.css";
 import React, { useEffect, useState } from "react";
-import { useRouter, redirect } from "next/navigation";
+import { redirect } from "next/navigation";
 
 import { ContentTypes } from "../utils/types";
-import yorkie, { Text, Document, JSONArray } from "yorkie-js-sdk";
 import { displayPeers } from "../utils/displayPeers";
-import TextEditor from "./textEditor";
+import { parseDate } from "../utils/parseDate";
+import yorkie, { Document, JSONArray } from "yorkie-js-sdk";
+import Sceduler from "./Sceduler";
 
 const DEFAULT_CONTENT: JSONArray<ContentTypes> = [
   {
-    date: "27-07-23",
-    text: "Garry's birthday",
+    date: parseDate(new Date()).replace(/^\d{2}/, "01"),
+    text: "payday",
   },
   {
-    date: "15-07-23",
-    text: "payday",
+    date: parseDate(new Date()).replace(/^\d{2}/, "17"),
+    text: "Garry's birthday",
   },
 ];
 
-const DOCUMENT_KEY = `next.js-example-${new Date()
-  .toISOString()
-  .substring(0, 10)
-  .replace(/-/g, "")}`;
+// parseDate() value's format = "DD-MM-YYYY"
+const DOCUMENT_KEY = `next.js-Sceduler-${parseDate(new Date())}`;
 
 export default function Editor() {
-  const navigate = useRouter();
   const userName = window.localStorage.getItem("name");
 
   const [peers, setPeers] = useState<any>([userName]);
@@ -41,6 +39,7 @@ export default function Editor() {
     },
   });
 
+  // create Yorkie Document with useState value to handle doc dynamically
   const [doc] = useState<Document<{ content: JSONArray<ContentTypes> }>>(
     () =>
       new yorkie.Document<{ content: JSONArray<ContentTypes> }>(DOCUMENT_KEY),
@@ -48,17 +47,20 @@ export default function Editor() {
 
   const logOut = async () => {
     window.localStorage.removeItem("name");
+    // disconnect client
     await client.deactivate();
     window.location.replace("/");
   };
 
   const actions = {
+    // push new content to Yorkie's database
     addContent(date: string, text: string) {
       doc.update(root => {
         root.content.push({ date, text });
       });
     },
 
+    // delete selected content at Yorkie's database
     deleteContent(date: string) {
       doc.update(root => {
         let target;
@@ -70,11 +72,13 @@ export default function Editor() {
         }
 
         if (target) {
+          // delete content with keyValue
           root.content.deleteByID!(target.getID());
         }
       });
     },
 
+    // edit selected content at Yorkie's database
     updateContent(date: string, text: string) {
       doc.update(root => {
         let target;
@@ -89,16 +93,6 @@ export default function Editor() {
           target.text = text;
         }
       });
-    },
-
-    initContent() {
-      doc.update(root => {
-        let target;
-        for (const item of root.content) {
-          target = item as any;
-          root.content.deleteByID!(target.getID());
-        }
-      }, "");
     },
   };
 
@@ -142,8 +136,7 @@ export default function Editor() {
         log out
       </button>
       <hr />
-      <TextEditor content={content} peers={peers} actions={actions} />
-      <hr />
+      <Sceduler content={content} peers={peers} actions={actions} />
     </main>
   );
 }
