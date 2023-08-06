@@ -1,9 +1,9 @@
-import "./globals.css";
+import "./styles/globals.css";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "nextjs-example",
-  description: "example of yorkie-js-sdk with next.js",
+  title: "Next.js react-calendar example",
+  description: "example of yorkie-js-sdk with next.js & react-calendar",
 };
 
 export default function RootLayout({
