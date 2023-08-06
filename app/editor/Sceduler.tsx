@@ -70,6 +70,7 @@ export default function Sceduler(props: EditorPropsTypes) {
             }
           })}
         </div>
+        <p>{JSON.stringify(content)}</p>
         <div className={styles.inputForm_editor}>
           <h3>input form</h3>
           <textarea

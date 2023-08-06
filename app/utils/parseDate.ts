@@ -5,5 +5,5 @@ export function parseDate(date: Date) {
   day = Number(day) > 9 ? day : "0" + day;
   year = year.slice(2);
 
-  return `${month}-${day}-${year}`;
+  return `${day}-${month}-${year}`;
 }

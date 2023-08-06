@@ -6,10 +6,9 @@
 .memo {
   width: 100%;
   min-height: 1rem;
-  border-top: 1px solid black;
-  border-bottom: 1px solid black;
+  border-top: 1px solid #2f2f2f;
+  border-bottom: 1px solid #2f2f2f;
   word-wrap: break-word;
-  white-space: normal;
 }
 
 .inputForm_editor {

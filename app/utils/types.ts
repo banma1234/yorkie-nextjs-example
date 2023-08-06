@@ -1,6 +1,6 @@
 export interface ENVtypes {
-  url?: string;
-  apiKey?: string;
+  url: string;
+  apiKey: string;
 }
 
 export interface ContentTypes {
