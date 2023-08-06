@@ -1,15 +1,15 @@
 "use client";
 
 import React, { useState } from "react";
-import "./calendar.css";
-import styles from "./page.module.css";
+import "./styles/calendar.css";
+import styles from "./styles/page.module.css";
 
-import { EditorPropsTypes, CalendarValue } from "../utils/types";
-import { parseDate } from "../utils/parseDate";
+import { EditorPropsTypes, CalendarValue } from "./utils/types";
+import { parseDate } from "./utils/parseDate";
 import Calendar from "react-calendar";
 
 export default function Sceduler(props: EditorPropsTypes) {
-  const { content, peers, actions } = props;
+  const { content, actions } = props;
   const [date, onChange] = useState<CalendarValue>(new Date());
   const [text, setText] = useState<string>("Enter text here!");
 
@@ -40,13 +40,6 @@ export default function Sceduler(props: EditorPropsTypes) {
 
   return (
     <article>
-      <p>
-        peers : [
-        {peers.map((man: string, i: number) => {
-          return <span key={i}> {man}, </span>;
-        })}
-        ]
-      </p>
       <div>
         <Calendar
           onChange={onChange}
@@ -70,7 +63,6 @@ export default function Sceduler(props: EditorPropsTypes) {
             }
           })}
         </div>
-        <p>{JSON.stringify(content)}</p>
         <div className={styles.inputForm_editor}>
           <h3>input form</h3>
           <textarea

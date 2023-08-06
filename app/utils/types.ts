@@ -10,7 +10,6 @@ export interface ContentTypes {
 
 export interface EditorPropsTypes {
   content: Array<ContentTypes>;
-  peers: any;
   actions: { [name: string]: Function };
 }
 
