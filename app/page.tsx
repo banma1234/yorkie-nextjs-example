@@ -1,5 +1,5 @@
-/*
-  yorkie-js-sdk must be loaded on client-side
+/**
+  * yorkie-js-sdk must be loaded on client-side
 */
 "use client";
 
@@ -13,7 +13,7 @@ import yorkie, { Document, JSONArray } from "yorkie-js-sdk";
 import Sceduler from "./Sceduler";
 
 // parseDate() value's format = "DD-MM-YYYY"
-const DEFAULT_CONTENT: JSONArray<ContentTypes> = [
+const defaultContent: JSONArray<ContentTypes> = [
   {
     date: parseDate(new Date()).replace(/^\d{2}/, "01"),
     text: "payday",
@@ -31,9 +31,12 @@ const ENV: ENVtypes = {
 
 const DOCUMENT_KEY = `next.js-Sceduler-${parseDate(new Date())}`;
 
+/**
+  * main page
+*/
 export default function Editor() {
   const [peers, setPeers] = useState<string[]>([]);
-  const [content, setContent] = useState<Array<ContentTypes>>(DEFAULT_CONTENT);
+  const [content, setContent] = useState<Array<ContentTypes>>(defaultContent);
 
   // create Yorkie Document with useState value
   const [doc] = useState<Document<{ content: JSONArray<ContentTypes> }>>(
@@ -115,7 +118,7 @@ export default function Editor() {
       // 03. create default content if not exists.
       doc.update(root => {
         if (!root.content) {
-          root.content = DEFAULT_CONTENT;
+          root.content = defaultContent;
         }
       }, "create default content if not exists");
 
