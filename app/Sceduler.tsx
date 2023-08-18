@@ -8,6 +8,9 @@ import { EditorPropsTypes, CalendarValue } from "./utils/types";
 import { parseDate } from "./utils/parseDate";
 import Calendar from "react-calendar";
 
+/**
+* handle calendar component
+ */
 export default function Sceduler(props: EditorPropsTypes) {
   const { content, actions } = props;
   const [date, onChange] = useState<CalendarValue>(new Date());

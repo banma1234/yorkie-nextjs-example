@@ -10,13 +10,13 @@ export interface ContentTypes {
 
 export interface EditorPropsTypes {
   content: Array<ContentTypes>;
-  actions: { [name: string]: Function };
+  actions: { [name: string]: any };
 }
 
 export type ChangeEventHandler = (
   event: React.ChangeEvent<HTMLInputElement>,
 ) => void;
 
-type ValuePiece = Date | null;
+type ValuePiece = Date | any;
 
 export type CalendarValue = ValuePiece | [ValuePiece, ValuePiece];
