@@ -1,27 +1,27 @@
-import { Indexable } from 'yorkie-js-sdk';
+import { Indexable } from "yorkie-js-sdk";
 
 const randomPeers = [
-  'John',
-  'Alice',
-  'Steven',
-  'Kate',
-  'Daniel',
-  'Chang',
-  'Marie',
-  'Fred',
-  'Sanchez',
-  'Kim',
-  'Wayne',
-  'Seon',
-  'Diaz',
-  'Tom',
+  "John",
+  "Alice",
+  "Steven",
+  "Kate",
+  "Daniel",
+  "Chang",
+  "Marie",
+  "Fred",
+  "Sanchez",
+  "Kim",
+  "Wayne",
+  "Seon",
+  "Diaz",
+  "Tom",
 ];
 
 /**
  * display each peer's name
  */
 export function displayPeers(
-  peers: Array<{ clientID: string; presence: Indexable }>,
+  peers: Array<{ clientID: string; presence: Indexable }>
 ) {
   const users = [];
   for (const { presence } of peers) {
