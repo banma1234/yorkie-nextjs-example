@@ -1,25 +1,25 @@
 /**
  * yorkie-js-sdk must be loaded on client-side
  */
-"use client";
+'use client';
 
-import styles from "./styles/page.module.css";
-import React, { useEffect, useState } from "react";
+import styles from './styles/page.module.css';
+import React, { useEffect, useState } from 'react';
 
-import { ContentTypes, ENVtypes } from "./utils/types";
-import { displayPeers, createRandomPeers } from "./utils/handlePeers";
-import { parseDate } from "./utils/parseDate";
-import yorkie, { Document, JSONArray, DocEventType } from "yorkie-js-sdk";
-import Scheduler from "./Scheduler";
+import { ContentTypes, ENVtypes } from './utils/types';
+import { displayPeers, createRandomPeers } from './utils/handlePeers';
+import { parseDate } from './utils/parseDate';
+import yorkie, { Document, JSONArray, DocEventType } from 'yorkie-js-sdk';
+import Scheduler from './Scheduler';
 
 // parseDate() value's format = "DD-MM-YYYY"
 const defaultContent: JSONArray<ContentTypes> = [
   {
-    date: parseDate(new Date()).replace(/^\d{2}/, "01"),
-    text: "payday",
+    date: parseDate(new Date()).replace(/^\d{2}/, '01'),
+    text: 'payday',
   },
   {
-    date: parseDate(new Date()).replace(/^\d{2}/, "17"),
+    date: parseDate(new Date()).replace(/^\d{2}/, '17'),
     text: "Garry's birthday",
   },
 ];
@@ -40,7 +40,8 @@ export default function Editor() {
 
   // create Yorkie Document with useState value
   const [doc] = useState<Document<{ content: JSONArray<ContentTypes> }>>(
-    () => new yorkie.Document<{ content: JSONArray<ContentTypes> }>(documentKey)
+    () =>
+      new yorkie.Document<{ content: JSONArray<ContentTypes> }>(documentKey),
   );
 
   const actions = {
@@ -93,7 +94,7 @@ export default function Editor() {
     });
 
     // subscribe document event of "PresenceChanged"(="peers-changed")
-    doc.subscribe("presence", (event) => {
+    doc.subscribe('presence', (event) => {
       if (event.type !== DocEventType.PresenceChanged) {
         setPeers(displayPeers(doc.getPresences()));
       }
@@ -104,7 +105,7 @@ export default function Editor() {
      */
     async function attachDoc(
       doc: Document<{ content: JSONArray<ContentTypes> }>,
-      callback: (props: any) => void
+      callback: (props: any) => void,
     ) {
       // 01. activate client
       await client.activate();
@@ -120,7 +121,7 @@ export default function Editor() {
         if (!root.content) {
           root.content = defaultContent;
         }
-      }, "create default content if not exists");
+      }, 'create default content if not exists');
 
       // 04. subscribe doc's change event from local and remote.
       doc.subscribe((event) => {
@@ -140,7 +141,7 @@ export default function Editor() {
         peers : [
         {peers.map((man: string, i: number) => {
           return <span key={i}> {man}, </span>;
-        })}{" "}
+        })}{' '}
         ]
       </p>
       <Scheduler content={content} actions={actions} />

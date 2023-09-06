@@ -11,7 +11,7 @@ import Calendar from 'react-calendar';
 /**
  * handle calendar component
  */
-export default function Sceduler(props: EditorPropsTypes) {
+export default function Scheduler(props: EditorPropsTypes) {
   const { content, actions } = props;
   const [date, onChange] = useState<CalendarValue>(new Date());
   const [text, setText] = useState<string>('Enter text here!');
